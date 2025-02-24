@@ -1,6 +1,5 @@
 import argparse
-import os
-import sys
+import cowsay
 
 
 parser = argparse.ArgumentParser(
@@ -50,11 +49,12 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-picture1 = cowsay.cowsay(args.message1, cow=args.f, eyes=args.e, wrap_text=args.n)
-picture2 = cowsay.cowsay(args.message2, cow=args.F, eyes=args.E, wrap_text=args.N)
+picture1 = cowsay.cowsay(args.message1, cow=args.f, eyes=args.e, wrap_text=args.n)+'\n'
+picture2 = cowsay.cowsay(args.message2, cow=args.F, eyes=args.E, wrap_text=args.N)+'\n'
 
 lines1, lines2=picture1.split('\n'), picture2.split('\n')
 len1, len2=map(len, [lines1, lines2])
+maxlen1, maxlen2=max(map(len,lines1)), max(map(len,lines2))
 
-lines1, lines2=[' '*len(lines1[0])]*(len2-len1)+lines1, [' '*len(lines2[0])]*(len1-len2)+lines2
-for i in range(len1): print(lines1[i]+lines2[i])
+lines1, lines2=[' '*maxlen1]*(len2-len1)+lines1, [' '*maxlen2]*(len1-len2)+lines2
+for i in range(len1): print(lines1[i]+' '*(maxlen1-len(lines1[i]))+lines2[i])
