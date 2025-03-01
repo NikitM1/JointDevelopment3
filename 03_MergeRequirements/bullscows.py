@@ -3,7 +3,8 @@ import random
 import sys
 import urllib.request
 
-CHARACTERS=cowsay.list_cows()
+#CHARACTERS=cowsay.list_cows()
+CHARACTER=cowsay.read_dot_cow(open('myCow.cows'))
 DEFAULT_LENGTH=5
 
 def bullscows(guess: str, solution: str) -> tuple[int, int]:
@@ -23,16 +24,17 @@ def gameplay(ask: callable, inform: callable, words: list[str]) -> int:
     return askCount
 
 def ask(prompt: str, valid: list[str] = None) -> str:
-    print(cowsay.cowsay(prompt, cow=random.choice(CHARACTERS)))
+    print(cowsay.cowthink(prompt, cowfile=CHARACTER))
     guess=input().lower()
     if not valid: return guess
     while guess not in valid:
-        print(cowsay.cowsay('You have to enter a valid word\n'+prompt, cow=random.choice(CHARACTERS)))
+        print('You have to enter a valid word')
+        print(cowsay.cowthink(prompt, cowfile=CHARACTER))
         guess=input().lower()
     return guess
 
 def inform(format_string: str, bulls: int, cows: int) -> None:
-    print(cowsay.cowsay(format_string.format(bulls, cows), cow=random.choice(CHARACTERS)))
+    print(cowsay.cowthink(format_string.format(bulls, cows), cowfile=CHARACTER))
 
 def main():
     
