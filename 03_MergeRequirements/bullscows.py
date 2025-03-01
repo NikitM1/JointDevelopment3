@@ -1,7 +1,9 @@
+import cowsay
 import random
 import sys
 import urllib.request
 
+CHARACTERS=cowsay.list_cows()
 DEFAULT_LENGTH=5
 
 def bullscows(guess: str, solution: str) -> tuple[int, int]:
@@ -21,16 +23,16 @@ def gameplay(ask: callable, inform: callable, words: list[str]) -> int:
     return askCount
 
 def ask(prompt: str, valid: list[str] = None) -> str:
-    print(prompt, end='')
+    print(cowsay.cowsay(prompt, cow=random.choice(CHARACTERS)))
     guess=input().lower()
     if not valid: return guess
     while guess not in valid:
-        print('You have to enter a valid word\n'+prompt, end='')
+        print(cowsay.cowsay('You have to enter a valid word\n'+prompt, cow=random.choice(CHARACTERS)))
         guess=input().lower()
     return guess
 
 def inform(format_string: str, bulls: int, cows: int) -> None:
-    print(format_string.format(bulls, cows))
+    print(cowsay.cowsay(format_string.format(bulls, cows), cow=random.choice(CHARACTERS)))
 
 def main():
     
