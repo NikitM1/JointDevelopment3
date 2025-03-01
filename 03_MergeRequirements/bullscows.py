@@ -6,7 +6,7 @@ DEFAULT_LENGTH=5
 
 def bullscows(guess: str, solution: str) -> tuple[int, int]:
     bulls=sum(guess[i]==solution[i] for i in range(min(len(guess),len(solution))))
-    cows=max(len((set(guess)&set(solution)))-bulls,0)
+    cows=sum(min(guess.count(letter),solution.count(letter)) for letter in set(guess)&set(solution))-bulls
     return (bulls, cows)
 
 def gameplay(ask: callable, inform: callable, words: list[str]) -> int:
