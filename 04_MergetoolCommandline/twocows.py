@@ -22,15 +22,20 @@ class CowsayShell(cmd.Cmd):
         maxlen1, maxlen2=max(map(len,lines1)), max(map(len,lines2))
         
         lines1, lines2=[' '*maxlen1]*(len2-len1)+lines1, [' '*maxlen2]*(len1-len2)+lines2
-        return '\n'.join([lines1[i]+' '*(maxlen1-len(lines1[i]))+lines2[i] for i in range(len1)])
-        #for i in range(len1): print(lines1[i]+' '*(maxlen1-len(lines1[i]))+lines2[i])    
+        return '\n'.join([lines1[i]+' '*(maxlen1-len(lines1[i]))+lines2[i] for i in range(max(len1,len2))])
     
     def oneCowProcessing(self, f, words):
         message, kwargs=self.parseArguments(words)
         return f(message,**kwargs)
     
     def twoCowsProcessing(self, f, words):
-        pass
+        index=words.index('reply')
+        firstCowWords=words[:index]
+        secondCowWords=words[index+1:]
+        message1, kwargs1=self.parseArguments(firstCowWords)
+        message2, kwargs2=self.parseArguments(secondCowWords)
+        pictures=[f(message1,**kwargs1), f(message2,**kwargs2)]
+        return self.alignMessages(pictures)
     
     def callHandler(self, f, args):
         words=shlex.split(args)
