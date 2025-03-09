@@ -19,9 +19,9 @@ class CowsayShell(cmd.Cmd):
     def alignMessages(self, pictures):
         lines1, lines2=pictures[0].split('\n'), pictures[1].split('\n')
         len1, len2=map(len, [lines1, lines2])
-        maxlen1, maxlen2=max(map(len,lines1)), max(map(len,lines2))
+        maxlen1=max(map(len,lines1))
         
-        lines1, lines2=[' '*maxlen1]*(len2-len1)+lines1, [' '*maxlen2]*(len1-len2)+lines2
+        lines1, lines2=[' '*maxlen1]*(len2-len1)+lines1, [' ']*(len1-len2)+lines2
         return '\n'.join([lines1[i]+' '*(maxlen1-len(lines1[i]))+lines2[i] for i in range(max(len1,len2))])
     
     def oneCowProcessing(self, f, words):
@@ -39,7 +39,7 @@ class CowsayShell(cmd.Cmd):
     
     def callHandler(self, f, args):
         words=shlex.split(args)
-        t=args.count('reply')
+        t=words.count('reply')
         if t==0:
             return self.oneCowProcessing(f,words)
         elif t==1:
@@ -59,14 +59,14 @@ class CowsayShell(cmd.Cmd):
         print(make_bubble(text))
         
     def do_cowsay(self, args):
-        """usage: cowsay <request-message> [<cow-name> {<parameter-name>=<value>}] [reply <answer-message> [<cow-name> {<parameter-name>=<value>}]\n\nCreate an image of a talking cow]"""
+        """usage: cowsay <request-message> [<cow-name> {<parameter-name>=<value>}] [reply <answer-message> [<cow-name> {<parameter-name>=<value>}]]\n\nCreate an image of a talking cow"""
         try:
             print(self.callHandler(cowsay, args))
         except Exception as e:
             print('An error occurred while executing:',e)
     
     def do_cowthink(self, args):
-        """usage: cowsay <request-message> [<cow-name> {<parameter-name>=<value>}] [reply <answer-message> [<cow-name> {<parameter-name>=<value>}]\n\nCreate an image of a thinking cow]"""
+        """usage: cowthink <request-message> [<cow-name> {<parameter-name>=<value>}] [reply <answer-message> [<cow-name> {<parameter-name>=<value>}]]\n\nCreate an image of a thinking cow"""
         try:
             print(self.callHandler(cowthink, args))
         except Exception as e:
