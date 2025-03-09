@@ -7,7 +7,7 @@ class CowsayShell(cmd.Cmd):
     prompt='twocows> '
     
     def parseArguments(self, words):
-        if len(words)==0: raise ValueError('cow-name is a required argument')
+        if len(words)==0: raise ValueError('message is a required argument')
         message=words[0]
         kwargs={}
         if len(words)>=2: kwargs['cow']=words[1]
@@ -32,6 +32,16 @@ class CowsayShell(cmd.Cmd):
     def twoCowsProcessing(self, f, words):
         pass
     
+    def callHandler(self, f, args):
+        words=shlex.split(args)
+        t=args.count('reply')
+        if t==0:
+            return self.oneCowProcessing(f,words)
+        elif t==1:
+            return self.twoCowsProcessing(f,words)
+        else:
+            raise ValueError('only one reply is supported')        
+    
     def do_list_cows(self,args):
         """usage: list_cows\n\nList of all available animals"""
         animals=list_cows()
@@ -44,18 +54,16 @@ class CowsayShell(cmd.Cmd):
         print(make_bubble(text))
         
     def do_cowsay(self, args):
-        """usage: cowsay <request-message> [<cow-name> {<parameter-name>=<value>}] reply <answer-message> [<cow-name> {<parameter-name>=<value>}]\n\nCreate an image of a talking cow"""
+        """usage: cowsay <request-message> [<cow-name> {<parameter-name>=<value>}] [reply <answer-message> [<cow-name> {<parameter-name>=<value>}]\n\nCreate an image of a talking cow]"""
         try:
-            words=shlex.split(args)
-            print(self.oneCowProcessing(cowsay,words))
+            print(self.callHandler(cowsay, args))
         except Exception as e:
             print('An error occurred while executing:',e)
     
     def do_cowthink(self, args):
-        """usage: cowsay <request-message> [<cow-name> {<parameter-name>=<value>}] reply <answer-message> [<cow-name> {<parameter-name>=<value>}]\n\nCreate an image of a thinking cow"""
+        """usage: cowsay <request-message> [<cow-name> {<parameter-name>=<value>}] [reply <answer-message> [<cow-name> {<parameter-name>=<value>}]\n\nCreate an image of a thinking cow]"""
         try:
-            words=shlex.split(args)
-            print(self.oneCowProcessing(cowthink,words))
+            print(self.callHandler(cowthink, args))
         except Exception as e:
             print('An error occurred while executing:',e)   
     
